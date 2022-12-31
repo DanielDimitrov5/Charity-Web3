@@ -4,8 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Smart contracts
 
-(https://goerli.etherscan.io/address/0x0bD3c994B2733bD02444615D01ED967E606A5A45)
-(https://github.com/DanielDimitrov5/CharityContracts)
+https://goerli.etherscan.io/address/0x0bD3c994B2733bD02444615D01ED967E606A5A45
+https://github.com/DanielDimitrov5/CharityContracts
 
 ### Build in progress
 
