@@ -37,10 +37,7 @@ function App() {
 
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/fdf3393c2b54449bbca1f97522c92dd3');
-
-        // const infuraKey = 'fdf3393c2b54449bbca1f97522c92dd3';
-        // const provider = new ethers.providers.InfuraProvider('goerli', infuraKey);
+        // const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/');
 
         const signer = provider.getSigner();
         setSigner(signer);
