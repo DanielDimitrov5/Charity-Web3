@@ -11,6 +11,7 @@ import Featured from './components/Featured';
 import OurServices from './components/OurServices';
 import ContractContext from './contexts/ContractContext';
 import SignerContext from './contexts/SignerContext';
+import { infura_url } from './secrets';
 
 function App() {
 
@@ -18,10 +19,10 @@ function App() {
 
     const address = '0x0bD3c994B2733bD02444615D01ED967E606A5A45';
 
-    // const [provider, setProvider] = useState(null);
-
     const [account, setAccount] = useState(null);
+
     const [contract, setContract] = useState(null);
+    const [provider, setProvider] = useState(null);
 
     const [signer, setSigner] = useState(null);
 
@@ -30,69 +31,43 @@ function App() {
 
     const loadBlockchainData = async () => {
 
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const account = accounts[0];
-        setAccount(account);
+        if (window.ethereum === undefined) {
+            const provider = new ethers.providers.JsonRpcProvider(infura_url);
+            console.log(process.env.REACT_APP_INFURA_URL);
+            const contractInstance = new ethers.Contract(address, abi, provider);
 
+            setContract(contractInstance);
+            setProvider(provider);
 
-        window.ethereum.on('accountsChanged', async () => {
-            loadBlockchainData();
-        });
+            console.log("MetaMask not installed");
+        }
+        else {
 
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const account = accounts[0];
+            setAccount(account);
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/');
+            window.ethereum.on('accountsChanged', async () => {
+                loadBlockchainData();
+            });
 
-        const signer = provider.getSigner();
-        setSigner(signer);
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            setProvider(provider);
+            const signer = provider.getSigner();
+            setSigner(signer);
 
-        const contractInstance = new ethers.Contract(address, abi, signer);
-        setContract(contractInstance);
+            const contractInstance = new ethers.Contract(address, abi, signer);
+            setContract(contractInstance);
 
+            console.log("MetaMask installed");
+        }
 
         setMetaMaskInstalled(true);
     }
 
-    // const loadCharities = async () => {
-    //         const charity = await contract.getAllCauses();
-    //         setCharities(charity);
-    // }
-
     useEffect(() => {
         loadBlockchainData();
-
-        // loadCharities();
-
-        // console.info(charities);
-
     }, []);
-
-    const ownership = async () => {
-        // const owner = await contract.owner();
-        // console.info(owner);
-        // charities();
-        const funds = await contract.collectedFunds(1);
-
-        const bigNumber = ethers.BigNumber.from(funds._hex);
-
-        console.info(ethers.utils.formatEther(bigNumber));
-    }
-
-    // const charities = async () => {
-    //     const charities = await contract.getAllCauses();
-    //     console.info(charities[0]);
-    //     return charities[0];
-    // }
-
-    // const transferOwnership = async () => {
-    //     try {
-    //         const tx = await contract.connect(signer).donateToCharity(1, { value: ethers.utils.parseEther("0.05") });
-    //         console.info(tx);
-    //     }
-    //     catch (e) {
-    //         console.log(e);
-    //     }
-    // }
 
     const createCharity = async () => {
         try {
