@@ -1,13 +1,15 @@
 import Card from "./Card";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import ContractContext from "../contexts/ContractContext";
 
-const Featured = ({ contract, signer }) => {
+const Featured = () => {
 
     const [charities, setCharities] = useState([]);
 
+    const contract = useContext(ContractContext);
+
     const loadCharities = async () => {
         const charityCur = await contract.getAllCauses();
-        console.log(charityCur);
         setCharities(charityCur);
     }
 
@@ -23,12 +25,12 @@ const Featured = ({ contract, signer }) => {
                     <div className="col-md-12">
                         <div className="section-heading">
                             <span></span>
-                            <h2>Praesent nec dui sed urna</h2>
+                            <h2></h2>
                         </div>
                     </div>
                 </div>
                 <div className="row">
-                    {charities.map(x => {return <Card key={x.id} charityNumber={x.id} contract={contract} signer={signer} />})}
+                    {charities.map(x => {return <Card key={x.id} charityNumber={x.id} />})}
                 </div>
             </div>
         </section>

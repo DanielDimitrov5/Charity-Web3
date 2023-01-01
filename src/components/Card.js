@@ -1,12 +1,38 @@
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
-import { Button, Popover, Cascader, InputNumber, Select, Space } from 'antd';
+import { useEffect, useState, useContext } from "react";
+import { Button, Popover, InputNumber, Select, Space, Modal } from 'antd';
+import ContractContext from "../contexts/ContractContext";
+import SignerContext from "../contexts/SignerContext";
 
 
-const Card = ({ charityNumber, contract, signer }) => {
+const Card = ({ charityNumber }) => {
 
     const [charity, setCharity] = useState({});
     const [denomination, setDenominatio] = useState("ETH");
+
+    const [open, setOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [modalText, setModalText] = useState('Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.');
+
+    const showModal = () => {
+        console.log("showModal");
+        setOpen(true);
+    };
+    const handleOk = () => {
+        setModalText('The modal will be closed after one seconds');
+        setConfirmLoading(true);
+        setTimeout(() => {
+            setOpen(false);
+            setConfirmLoading(false);
+        }, 1000);
+    };
+    const handleCancel = () => {
+        console.log('Clicked cancel button');
+        setOpen(false);
+    };
+
+    const contract = useContext(ContractContext);
+    const signer = useContext(SignerContext);
 
     const loadCharity = async () => {
         const charity = await contract.charities(charityNumber);
@@ -53,13 +79,13 @@ const Card = ({ charityNumber, contract, signer }) => {
 
         let convertedAmount;
 
-        if(denomination === "ETH") {
+        if (denomination === "ETH") {
             convertedAmount = ethers.utils.parseEther(amount);
         }
-        else if(denomination === "GWEI") {
+        else if (denomination === "GWEI") {
             convertedAmount = ethers.utils.parseUnits(amount, "gwei");
         }
-        else if(denomination === "WEI") {
+        else if (denomination === "WEI") {
             convertedAmount = ethers.utils.parseUnits(amount, "wei");
         }
 
@@ -81,7 +107,7 @@ const Card = ({ charityNumber, contract, signer }) => {
         <div className="col-md-4 col-sm-6 col-xs-12">
             <div className="featured-item">
                 <div className="thumb">
-                    <img src="img/featured_item_1.jpg" alt="" />
+                    <img src="img/featured_item_4.jpg" alt="" />
                     <div className="overlay-content">
                         <ul>
                             <li><i className="fa fa-star" /></li>
@@ -111,9 +137,20 @@ const Card = ({ charityNumber, contract, signer }) => {
                         </div>
                         <div className="col-md-6">
                             <div className="text-button">
-                                <a href="#">Continue Reading</a>
+                                <a onClick={showModal}>More Info</a>
                             </div>
                         </div>
+                        <Modal
+                            title="Title"
+                            open={open}
+                            onOk={handleOk}
+                            confirmLoading={confirmLoading}
+                            onCancel={handleCancel}
+                            width={1000}
+                            zIndex={1000}
+                        >
+                            <p>{modalText}</p>
+                        </Modal>
                     </div>
                 </div>
             </div>

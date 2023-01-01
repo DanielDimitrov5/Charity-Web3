@@ -5,8 +5,8 @@ const PopularPlaces = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="section-heading">
-                                <span>Popular Places</span>
-                                <h2>Integer sapien odio</h2>
+                                <span>Charity</span>
+                                <h2>Donate to charity cause!</h2>
                             </div>
                         </div>
                     </div>

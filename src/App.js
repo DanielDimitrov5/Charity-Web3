@@ -1,12 +1,16 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { abi } from './abi.js';
+
 import Header from './components/Header';
 import Banner from './components/Banner';
 import PopularPlaces from './components/PopularSection';
 import Featured from './components/Featured';
 import OurServices from './components/OurServices';
+import ContractContext from './contexts/ContractContext';
+import SignerContext from './contexts/SignerContext';
 
 function App() {
 
@@ -41,7 +45,6 @@ function App() {
 
         const signer = provider.getSigner();
         setSigner(signer);
-
 
         const contractInstance = new ethers.Contract(address, abi, signer);
         setContract(contractInstance);
@@ -93,41 +96,43 @@ function App() {
 
     const createCharity = async () => {
         try {
-            const tx = await contract.connect(signer).createNewCharityCause("Africaaa", "World Wide #5", '1000', '0x106D801337670aa15bBF286Bd35080f8e3A36EA8', { gasLimit: 1000000 } );
-        console.info(tx);
-    }
+            const tx = await contract.connect(signer).createNewCharityCause("Africaaa", "World Wide #5", '1000', '0x106D801337670aa15bBF286Bd35080f8e3A36EA8', { gasLimit: 1000000 });
+            console.info(tx);
+        }
         catch (e) {
-        console.log(e);
+            console.log(e);
+        }
     }
-}
 
-if (MetaMaskInstalled === false) {
+    if (MetaMaskInstalled === false) {
+        return (
+            <div className="App">
+                <header className="App-header">
+                    <p>
+                        Login with MetaMask
+                    </p>
+                </header>
+            </div>
+        );
+    }
+
     return (
-        <div className="App">
-            <header className="App-header">
-                <p>
-                    MetaMask is not installed
-                </p>
-            </header>
-        </div>
+        <div>
+            {/* <button onClick={createCharity}>createCharity</button> */}
+            <ContractContext.Provider value={contract}>
+                <Header account={account} />
+                <Banner />
+                <PopularPlaces />
+                <SignerContext.Provider value={signer}>
+                    <Featured />
+                </SignerContext.Provider>
+                {/* <OurServices /> */}
+            </ContractContext.Provider>
+
+            {/* To be removed */}
+            {/* <UselessContentTemp /> */}
+        </div >
     );
-}
-
-return (
-    <div>
-        <p>{account}</p>
-        <button onClick={createCharity}>createCharity</button>
-
-        <Header />
-        <Banner />
-        <PopularPlaces />
-        <Featured contract={contract} signer={signer} />
-        <OurServices />
-
-        {/* To be removed */}
-        {/* <UselessContentTemp /> */}
-    </div>
-);
 }
 
 export default App;
