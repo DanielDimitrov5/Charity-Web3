@@ -33,7 +33,6 @@ function App() {
 
         if (window.ethereum === undefined) {
             const provider = new ethers.providers.JsonRpcProvider(infura_url);
-            console.log(process.env.REACT_APP_INFURA_URL);
             const contractInstance = new ethers.Contract(address, abi, provider);
 
             setContract(contractInstance);
@@ -58,8 +57,6 @@ function App() {
 
             const contractInstance = new ethers.Contract(address, abi, signer);
             setContract(contractInstance);
-
-            console.log("MetaMask installed");
         }
 
         setMetaMaskInstalled(true);
@@ -71,7 +68,7 @@ function App() {
 
     const createCharity = async () => {
         try {
-            const tx = await contract.connect(signer).createNewCharityCause("Africaaa", "World Wide #5", '1000', '0x106D801337670aa15bBF286Bd35080f8e3A36EA8', { gasLimit: 1000000 });
+            const tx = await contract.connect(signer).createNewCharityCause("", "World Wide #5", '5', '0x106D801337670aa15bBF286Bd35080f8e3A36EA8', { gasLimit: 1000000 });
             console.info(tx);
         }
         catch (e) {
@@ -84,7 +81,7 @@ function App() {
             <div className="App">
                 <header className="App-header">
                     <p>
-                        Login with MetaMask
+                        Login with Wallet
                     </p>
                 </header>
             </div>

@@ -48,7 +48,7 @@ const Banner = () => {
                 <h3 style={contentStyle}>Charity causes: {charityCount}</h3>
             </div>
             <div>
-                <h3 style={contentStyle}>Total Funds collecte: {collectedFunds}</h3>
+                <h3 style={contentStyle}>Total Funds collected: {collectedFunds}</h3>
             </div>
             <div>
                 <h3 style={contentStyle}>Goals copleated: 0</h3>
