@@ -66,16 +66,6 @@ function App() {
         loadBlockchainData();
     }, []);
 
-    const createCharity = async () => {
-        try {
-            const tx = await contract.connect(signer).createNewCharityCause("", "World Wide #5", '5', '0x106D801337670aa15bBF286Bd35080f8e3A36EA8', { gasLimit: 1000000 });
-            console.info(tx);
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
-
     if (MetaMaskInstalled === false) {
         return (
             <div className="App">

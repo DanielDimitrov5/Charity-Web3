@@ -2,7 +2,7 @@ import { Button, Tooltip } from 'antd';
 
 const Header = ({ account }) => {
 
-    const text = <span>{account}</span>;
+    const currentAccount = <span>{account}</span>;
 
     return (
         <div className="wrap">
@@ -16,10 +16,10 @@ const Header = ({ account }) => {
                             </div></a>
                             <nav id="primary-nav" className="dropdown cf">
                                 <ul className="dropdown menu">
-                                    <li className="active"><a href="#">Popular</a></li>
-                                    <li><a href="#">All Charities</a></li>
+                                    <li className="active"><a>Popular</a></li>
+                                    <li><a>All Charities</a></li>
 
-                                    {account != null ? <Tooltip placement="bottom" color='blue' title={text}>
+                                    {account != null ? <Tooltip placement="bottom" color='blue' title={currentAccount}>
                                                              <li><a className="scrollTo" data-scrollto="contact">Welcome {account.substring(0, 5) + "..." + account.substring(account.length - 5, account.length)}</a></li>
                                                        </Tooltip>
                                         : <li><a className="scrollTo" data-scrollto="contact">No account detected</a></li>}

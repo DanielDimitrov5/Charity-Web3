@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from 'react';
-import { Carousel } from 'antd';
+import { Carousel, Col, Row, Statistic } from 'antd';
 import ContractContext from '../contexts/ContractContext';
 import { ethers } from 'ethers';
 
 const contentStyle = {
-    margin: 0,
+    margin: '0 auto',
     height: '260px',
     color: '#fff',
     lineHeight: '240px',
@@ -24,21 +24,8 @@ const Banner = () => {
         setCharityCount(charityCur.length);
     }
 
-    // const GetCollectedFunds = async () => {
-    //     let funds = 0;
-        
-    //     for (let i = 1; i <= charityCount; i++) {
-    //         const charityFunds = await contract.collectedFunds(i);
-    //         const num = ethers.BigNumber.from(charityFunds._hex);
-    //         funds += ethers.utils.formatEther(num);
-    //     }
-
-    //     setCollectedFunds(funds);
-    // }
-
     useEffect(() => {
         GetCharityCount();
-        // GetCollectedFunds();
     }, []);
 
 
@@ -51,7 +38,13 @@ const Banner = () => {
                 <h3 style={contentStyle}>Total Funds collected: {collectedFunds}</h3>
             </div>
             <div>
-                <h3 style={contentStyle}>Goals copleated: 0</h3>
+                <h3 style={contentStyle}>
+                    <Row span={12}>
+                        <Col span={24}>
+                            <Statistic title="Unmerged" value={93} suffix="/ 100" />
+                        </Col>
+                    </Row>
+                </h3>
             </div>
         </Carousel>
     );
