@@ -8,7 +8,7 @@ import SignerContext from "../contexts/SignerContext";
 const Card = ({ charityNumber }) => {
 
     const [charity, setCharity] = useState({});
-    const [denomination, setDenominatio] = useState("ETH");
+    const [denomination, setDenomination] = useState("ETH");
 
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -60,7 +60,7 @@ const Card = ({ charityNumber }) => {
     const selectAfter = (
         <Select
             onChange={(value) => {
-                setDenominatio(value)
+                setDenomination(value)
             }}
             defaultValue="ETH"
             style={{

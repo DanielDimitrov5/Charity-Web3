@@ -6,7 +6,7 @@ import { abi } from './abi.js';
 
 import Header from './components/Header';
 import Banner from './components/Banner';
-import PopularPlaces from './components/PopularSection';
+import Front from './components/Front';
 import Featured from './components/Featured';
 import OurServices from './components/OurServices';
 import ContractContext from './contexts/ContractContext';
@@ -94,7 +94,7 @@ function App() {
             <ContractContext.Provider value={contract}>
                 <Header account={account} />
                 <Banner />
-                <PopularPlaces />
+                <Front signerrr={signer} />
                 <SignerContext.Provider value={signer}>
                     <Featured />
                 </SignerContext.Provider>
