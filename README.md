@@ -10,9 +10,12 @@ https://github.com/DanielDimitrov5/CharityContracts
 
 # 🛠 Built with:
 [React]()
-[Solidity]
-[Hardhat]
-[Ant Design]
+<br />
+[Solidity]()
+<br />
+[Hardhat]()
+<br />
+[Ant Design]()
 
 ### Build in progress
 
