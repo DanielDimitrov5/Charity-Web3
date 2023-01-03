@@ -9,13 +9,13 @@ https://goerli.etherscan.io/address/0x0bD3c994B2733bD02444615D01ED967E606A5A45
 https://github.com/DanielDimitrov5/CharityContracts
 
 # 🛠 Built with:
-[React]()
+[React]("#")
 <br />
-[Solidity]()
+[Solidity](#)
 <br />
-[Hardhat]()
+[Hardhat](#)
 <br />
-[Ant Design]()
+[Ant Design](#)
 
 ### Build in progress
 
