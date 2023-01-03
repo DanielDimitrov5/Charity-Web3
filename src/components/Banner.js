@@ -37,7 +37,7 @@ const Banner = () => {
             <div>
                 <h3 style={contentStyle}>Total Funds collected: {collectedFunds}</h3>
             </div>
-            <div>
+            {/* <div>
                 <h3 style={contentStyle}>
                     <Row span={12}>
                         <Col span={24}>
@@ -45,7 +45,7 @@ const Banner = () => {
                         </Col>
                     </Row>
                 </h3>
-            </div>
+            </div> */}
         </Carousel>
     );
 }

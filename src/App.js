@@ -80,7 +80,6 @@ function App() {
 
     return (
         <div>
-            {/* <button onClick={createCharity}>createCharity</button> */}
             <ContractContext.Provider value={contract}>
                 <Header account={account} />
                 <Banner />
