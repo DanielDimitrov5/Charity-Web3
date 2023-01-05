@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import ContractContext from "../contexts/ContractContext";
 import { Button } from 'antd';
 
-const Featured = ({ connectToNetwork }) => {
+const Featured = () => {
 
     const [charities, setCharities] = useState([]);
     const [totalCharities, setTotalCharities] = useState(0);
@@ -18,23 +18,26 @@ const Featured = ({ connectToNetwork }) => {
 
         setIsLoading(true);
 
-        if (page === 1) {
-            const fetchedCharities = await contract.getAllCauses();
-            const pageData = fetchedCharities.slice(0, pageSize);
-            setCharities(pageData);
-            setIsLoading(false);
-            return;
-        }
+        const fetcKhedCharities = await contract.getAllCauses();
+        setCharities(fetcKhedCharities);
+        setIsLoading(false);
 
-        setTimeout(async () => {
-            const fetchedCharities = await contract.getAllCauses();
+        // if (page === 1) {
+        //     const pageData = fetchedCharities.slice(0, pageSize);
+        //     setCharities(pageData);
+        //     setIsLoading(false);
+        //     return;
+        // }
 
-            const startIndex = (page - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-            const pageData = fetchedCharities.slice(startIndex, endIndex);
-            setCharities([...charities, ...pageData]);
-            setIsLoading(false);
-        }, 1000);
+        // setTimeout(async () => {
+        //     const fetchedCharities = await contract.getAllCauses();
+
+        //     const startIndex = (page - 1) * pageSize;
+        //     const endIndex = startIndex + pageSize;
+        //     const pageData = fetchedCharities.slice(startIndex, endIndex);
+        //     setCharities([...charities, ...pageData]);
+        //     setIsLoading(false);
+        // }, 1000);
     };
 
     useEffect(() => {
@@ -63,7 +66,7 @@ const Featured = ({ connectToNetwork }) => {
                     </div>
                 </div>
                 <div className="row">
-                    {charities.map(x => { return <Card key={x.id} charityNumber={x.id} /> })}
+                    {charities.slice(0, page * pageSize).map(x => { return <Card key={x.id} charityNumber={x.id} /> })}
                 </div>
                 <br />
                 <div className="row">

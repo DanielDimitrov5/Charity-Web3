@@ -15,7 +15,7 @@ import { infura_url } from './secrets';
 function App() {
 
     
-    const address = '0x0bD3c994B2733bD02444615D01ED967E606A5A45'
+    const address = '0x9D9cAfEcc6B9e3A73735C560Fc98d7239fd3E497'
 
     const [account, setAccount] = useState(null);
 

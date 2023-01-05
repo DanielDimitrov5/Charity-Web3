@@ -7,8 +7,11 @@ import SignerContext from "../contexts/SignerContext";
 
 const Card = ({ charityNumber }) => {
 
-    const [charity, setCharity] = useState({});
+    const [charity, setCharity] = useState([]);
+    const [charityDescriptions, setCharityDescriptions] = useState([]);
     const [denomination, setDenomination] = useState("ETH");
+
+    const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -35,14 +38,18 @@ const Card = ({ charityNumber }) => {
     const signer = useContext(SignerContext);
 
     const loadCharity = async () => {
+
         const charity = await contract.charities(charityNumber);
         setCharity(charity);
+
+        const descriptions = await contract.descriptions(charityNumber, 0);
+        setCharityDescriptions(descriptions);
     }
 
     const donateToCharity = async (value) => {
         try {
+            console.log(value);
             const tx = await contract.connect(signer).donateToCharity(charityNumber, { value: value });
-            console.info(tx);
         }
         catch (e) {
             console.log(e);
@@ -52,6 +59,13 @@ const Card = ({ charityNumber }) => {
     useEffect(() => {
         loadCharity();
     }, []);
+
+
+    const converHexToDecimal = (hex) => {
+        if (hex) {
+            return ethers.utils.formatEther(hex);
+        }
+    }
 
     const popoverTite = <span>Donation</span>;
 
@@ -81,6 +95,7 @@ const Card = ({ charityNumber }) => {
 
         if (denomination === "ETH") {
             convertedAmount = ethers.utils.parseEther(amount);
+            console.log(convertedAmount);
         }
         else if (denomination === "GWEI") {
             convertedAmount = ethers.utils.parseUnits(amount, "gwei");
@@ -108,7 +123,7 @@ const Card = ({ charityNumber }) => {
             <div className="featured-item">
                 <div className="thumb">
                     <img src="img/featured_item_4.jpg" alt="" />
-                    <div className="overlay-content">
+                    {/* <div className="overlay-content">
                         <ul>
                             <li><i className="fa fa-star" /></li>
                             <li><i className="fa fa-star" /></li>
@@ -116,7 +131,7 @@ const Card = ({ charityNumber }) => {
                             <li><i className="fa fa-star" /></li>
                             <li><i className="fa fa-star" /></li>
                         </ul>
-                    </div>
+                    </div> */}
                     <div className="date-content">
                         <h6>28</h6>
                         <span>August</span>
@@ -124,8 +139,8 @@ const Card = ({ charityNumber }) => {
                 </div>
                 <div className="down-content">
                     <h4>{charity.title}</h4>
-                    <span>{(charity.targetFunds)} ETH</span>
-                    <p>{charity.description}</p>
+                    <span>{converHexToDecimal(charity?.targetFunds?._hex)} ETH</span>
+                    <p>{charityDescriptions}</p>
                     <p>{charity.targetAddress}</p>
                     <div className="row">
                         <div className="col-md-6 first-button">

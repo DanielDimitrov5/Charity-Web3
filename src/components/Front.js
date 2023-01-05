@@ -55,19 +55,18 @@ const Front = ({ signer, connectToNetwork }) => {
         form.resetFields();
     };
 
-    const convertToEther = (amount) => {
+    const convertToWei = (amount) => {
         let convertedAmount;
         //conver to ether
         if (denomination === "ETH") {
-            convertedAmount = amount.toString();
+            convertedAmount = ethers.utils.parseUnits(amount, "ether");
         }
         else if (denomination === "GWEI") {
-            //convert Gwei to ether
-            convertedAmount = BigNumber.from((amount / 1000000000).toString).toString();
-
+            //convert Gwei to wei
+            convertedAmount = ethers.utils.parseUnits(amount, "gwei");
         }
         else if (denomination === "WEI") {
-            convertedAmount = ethers.utils.parseUnits(amount, "wei");
+            convertedAmount = amount;
         }
 
         return convertedAmount;
@@ -79,8 +78,10 @@ const Front = ({ signer, connectToNetwork }) => {
             return;
         }
 
+        const targetFundsWei = convertToWei(targetFunds.toString());
+
         try {
-            const tx = await contract.createNewCharityCause(title, description, 'QmRvPMmCuwX2vJdNkpr2c4YeGbJdUsJZyvZ2EmoavhYJXr',targetFunds.toString(), 1704452300, targetAddress, { gasLimit: 524073  });
+            const tx = await contract.createNewCharityCause(title, description, "hash123", targetFundsWei, 13213123, targetAddress, { gasLimit: 524073 });
 
             success();
             onClear();

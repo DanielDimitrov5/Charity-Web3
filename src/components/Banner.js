@@ -17,11 +17,21 @@ const Banner = () => {
     const contract = useContext(ContractContext);
 
     const [charityCount, setCharityCount] = useState(0);
-    const [collectedFunds, setCollectedFunds] = useState("0");
+    const [collectedFunds, setCollectedFunds] = useState(0);
 
     const GetCharityCount = async () => {
-        const charityCur = await contract.getAllCauses();
-        setCharityCount(charityCur.length);
+        const charities = await contract.getAllCauses();
+        setCharityCount(charities.length);
+
+        let totalFunds = 0;
+        
+        for (let i = 1; i <= charities.length; i++) {
+            const collectedFundsC = await contract.collectedFunds(i);
+            const decimal = parseInt(collectedFundsC);
+            totalFunds += decimal;
+       }
+
+       setCollectedFunds(totalFunds);
     }
 
     useEffect(() => {
