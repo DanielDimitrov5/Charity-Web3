@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import ContractContext from "../contexts/ContractContext";
 import { Button } from 'antd';
 
-const Featured = () => {
+const Featured = ({ connectToNetwork }) => {
 
     const [charities, setCharities] = useState([]);
     const [totalCharities, setTotalCharities] = useState(0);

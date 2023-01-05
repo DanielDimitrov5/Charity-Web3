@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, InputNumber, message } from 'antd';
+import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, InputNumber, Tooltip, message } from 'antd';
 
 import { ethers } from 'ethers';
 import { BigNumber } from 'ethers';
@@ -9,7 +9,7 @@ import ContractContext from '../contexts/ContractContext';
 
 const { Option } = Select;
 
-const Front = () => {
+const Front = ({ signer, connectToNetwork }) => {
 
     const contract = useContext(ContractContext);
 
@@ -58,15 +58,15 @@ const Front = () => {
     const convertToEther = (amount) => {
         let convertedAmount;
         //conver to ether
-        if(denomination === "ETH") {
+        if (denomination === "ETH") {
             convertedAmount = amount.toString();
         }
-        else if(denomination === "GWEI") {
+        else if (denomination === "GWEI") {
             //convert Gwei to ether
             convertedAmount = BigNumber.from((amount / 1000000000).toString).toString();
 
         }
-        else if(denomination === "WEI") {
+        else if (denomination === "WEI") {
             convertedAmount = ethers.utils.parseUnits(amount, "wei");
         }
 
@@ -80,7 +80,7 @@ const Front = () => {
         }
 
         try {
-            const tx = await contract.createNewCharityCause(title, description, targetFunds.toString(), targetAddress, { gasLimit: 1000000 });
+            const tx = await contract.createNewCharityCause(title, description, 'QmRvPMmCuwX2vJdNkpr2c4YeGbJdUsJZyvZ2EmoavhYJXr',targetFunds.toString(), 1704452300, targetAddress, { gasLimit: 524073  });
 
             success();
             onClear();
@@ -130,9 +130,18 @@ const Front = () => {
                             <div className="col-md-12" style={{ display: 'flex', justifyContent: 'center' }}>
                                 <Space direction="vertical">
                                     <Space wrap>
-                                        <Button type="primary" shape="round" size='large' onClick={showDrawer} icon={<PlusOutlined />}>
-                                            Create a new Charity
-                                        </Button>
+                                        {signer ?
+                                            <Button type="primary" shape="round" size='large' onClick={showDrawer} icon={<PlusOutlined />}>
+                                                Create a new Charity
+                                            </Button>
+                                            :
+                                            <Tooltip placement="bottom" title="Use wallet like Metamask, Coinbase Wallet etc. This will allow you it interact with the ethereum network." color="blue">
+                                                <Button type="primary" shape="round" size='large' onClick={connectToNetwork} icon={<PlusOutlined />}>
+                                                    Connect with Wallet
+                                                </Button>
+                                            </Tooltip>
+
+                                        }
                                     </Space>
                                 </Space>
                             </div>

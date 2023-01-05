@@ -1,6 +1,6 @@
 import './App.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ethers } from 'ethers';
 import { abi } from './abi.js';
 
@@ -8,21 +8,19 @@ import Header from './components/Header';
 import Banner from './components/Banner';
 import Front from './components/Front';
 import Featured from './components/Featured';
-import OurServices from './components/OurServices';
 import ContractContext from './contexts/ContractContext';
 import SignerContext from './contexts/SignerContext';
 import { infura_url } from './secrets';
 
 function App() {
 
-    const [MetaMaskInstalled, setMetaMaskInstalled] = useState(false);
-
-    const address = '0x0bD3c994B2733bD02444615D01ED967E606A5A45';
+    
+    const address = '0x0bD3c994B2733bD02444615D01ED967E606A5A45'
 
     const [account, setAccount] = useState(null);
 
-    const [contract, setContract] = useState(null);
-    const [provider, setProvider] = useState(null);
+    const [provider, setProvider] = useState(new ethers.providers.JsonRpcProvider(infura_url));
+    const [contract, setContract] = useState(new ethers.Contract(address, abi, provider));
 
     const [signer, setSigner] = useState(null);
 
@@ -31,19 +29,11 @@ function App() {
 
     const loadBlockchainData = async () => {
 
-        if (window.ethereum === undefined) {
-            const provider = new ethers.providers.JsonRpcProvider(infura_url);
-            const contractInstance = new ethers.Contract(address, abi, provider);
-
-            setContract(contractInstance);
-            setProvider(provider);
-
-            console.log("MetaMask not installed");
-        }
-        else {
+        if (window.ethereum) {
 
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             const account = accounts[0];
+
             setAccount(account);
 
             window.ethereum.on('accountsChanged', async () => {
@@ -52,30 +42,17 @@ function App() {
 
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             setProvider(provider);
+
             const signer = provider.getSigner();
             setSigner(signer);
 
             const contractInstance = new ethers.Contract(address, abi, signer);
             setContract(contractInstance);
         }
+        else {
+            alert('Please install MetaMask');
+        }
 
-        setMetaMaskInstalled(true);
-    }
-
-    useEffect(() => {
-        loadBlockchainData();
-    }, []);
-
-    if (MetaMaskInstalled === false) {
-        return (
-            <div className="App">
-                <header className="App-header">
-                    <p>
-                        Login with Wallet
-                    </p>
-                </header>
-            </div>
-        );
     }
 
     return (
@@ -83,7 +60,7 @@ function App() {
             <ContractContext.Provider value={contract}>
                 <Header account={account} />
                 <Banner />
-                <Front signerrr={signer} />
+                <Front signer={signer} connectToNetwork={loadBlockchainData} />
                 <SignerContext.Provider value={signer}>
                     <Featured />
                 </SignerContext.Provider>
