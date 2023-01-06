@@ -6,12 +6,14 @@ import { ethers } from 'ethers';
 import { BigNumber } from 'ethers';
 import { isAddress } from 'ethers/lib/utils';
 import ContractContext from '../contexts/ContractContext';
+import SignerContext from '../contexts/SignerContext';
 
 const { Option } = Select;
 
-const Front = ({ signer, connectToNetwork }) => {
+const Front = ({ connectToNetwork }) => {
 
     const contract = useContext(ContractContext);
+    const signer = useContext(SignerContext);
 
     const [open, setOpen] = useState(false);
     const [denomination, setDenomination] = useState("ETH");
