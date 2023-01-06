@@ -4,17 +4,19 @@ import { useState } from 'react';
 import { ethers } from 'ethers';
 import { abi } from './abi.js';
 
+import { Routes, Route } from 'react-router-dom';
+
 import Header from './components/Header';
-import Banner from './components/Banner';
-import Front from './components/Front';
-import Featured from './components/Featured';
+
+import Error404 from './components/Error404';
+
+import MainContent from './components/MainContent';
 import ContractContext from './contexts/ContractContext';
 import SignerContext from './contexts/SignerContext';
 import { infura_url } from './secrets';
 
 function App() {
 
-    
     const address = '0x9D9cAfEcc6B9e3A73735C560Fc98d7239fd3E497'
 
     const [account, setAccount] = useState(null);
@@ -23,9 +25,6 @@ function App() {
     const [contract, setContract] = useState(new ethers.Contract(address, abi, provider));
 
     const [signer, setSigner] = useState(null);
-
-    const [charities, setCharities] = useState(null);
-
 
     const loadBlockchainData = async () => {
 
@@ -50,7 +49,7 @@ function App() {
             setContract(contractInstance);
         }
         else {
-            alert('Please install MetaMask');
+            alert('Please install WalletConnect or MetaMask to use this dApp.');
         }
 
     }
@@ -58,17 +57,14 @@ function App() {
     return (
         <div>
             <ContractContext.Provider value={contract}>
-                <Header account={account} />
-                <Banner />
-                <Front signer={signer} connectToNetwork={loadBlockchainData} />
                 <SignerContext.Provider value={signer}>
-                    <Featured />
+                    <Header account={account} />
+                    <Routes>
+                        <Route path="/" element={<MainContent connectToNetwork={loadBlockchainData} />} />
+                        <Route path="*" element={<Error404/>} />
+                    </Routes>
                 </SignerContext.Provider>
-                {/* <OurServices /> */}
             </ContractContext.Provider>
-
-            {/* To be removed */}
-            {/* <UselessContentTemp /> */}
         </div >
     );
 }
