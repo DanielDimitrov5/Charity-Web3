@@ -61,7 +61,7 @@ function App() {
                     <Header account={account} />
                     <Routes>
                         <Route path="/" element={<MainContent connectToNetwork={loadBlockchainData} />} />
-                        <Route path="*" element={<Error404/>} />
+                        <Route path="*" element={<Error404 />} />
                     </Routes>
                 </SignerContext.Provider>
             </ContractContext.Provider>
