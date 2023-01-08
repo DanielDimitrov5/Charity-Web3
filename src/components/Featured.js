@@ -21,23 +21,6 @@ const Featured = () => {
         const fetcKhedCharities = await contract.getAllCauses();
         setCharities(fetcKhedCharities);
         setIsLoading(false);
-
-        // if (page === 1) {
-        //     const pageData = fetchedCharities.slice(0, pageSize);
-        //     setCharities(pageData);
-        //     setIsLoading(false);
-        //     return;
-        // }
-
-        // setTimeout(async () => {
-        //     const fetchedCharities = await contract.getAllCauses();
-
-        //     const startIndex = (page - 1) * pageSize;
-        //     const endIndex = startIndex + pageSize;
-        //     const pageData = fetchedCharities.slice(startIndex, endIndex);
-        //     setCharities([...charities, ...pageData]);
-        //     setIsLoading(false);
-        // }, 1000);
     };
 
     useEffect(() => {

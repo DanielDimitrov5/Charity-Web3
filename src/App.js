@@ -7,8 +7,9 @@ import { abi } from './abi.js';
 import { Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
-
+import CharityPage from './components/CharityPage';
 import Error404 from './components/Error404';
+import UselessContentTemp from './components/UselessContentTemp';
 
 import MainContent from './components/MainContent';
 import ContractContext from './contexts/ContractContext';
@@ -61,10 +62,12 @@ function App() {
                     <Header account={account} />
                     <Routes>
                         <Route path="/" element={<MainContent connectToNetwork={loadBlockchainData} />} />
+                        <Route path="/charity/:id" element={<CharityPage />} />
                         <Route path="*" element={<Error404 />} />
                     </Routes>
                 </SignerContext.Provider>
             </ContractContext.Provider>
+            {/* <UselessContentTemp/> */}
         </div >
     );
 }
