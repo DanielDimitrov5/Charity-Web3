@@ -20,6 +20,8 @@ const Card = ({ charityNumber }) => {
 
     const [open, setOpen] = useState(false); //modal
 
+    const [imagehash, setImagehash] = useState(''); //imagehash
+
     const contract = useContext(ContractContext);
     const signer = useContext(SignerContext);
 
@@ -42,6 +44,9 @@ const Card = ({ charityNumber }) => {
         const formattedDate = formatter.format(deadline);
 
         setDeadline(formattedDate.toString());
+
+        const imageHash = await contract.imageHashes(charityNumber, 0);
+        setImagehash(imageHash);
 
         setLoading(false);
     }
@@ -183,6 +188,7 @@ const Card = ({ charityNumber }) => {
                 <p>{parseInt(charityCollectedFunds)}/{parseInt(charity?.targetFunds)} wei collected</p>
                 <Progress percent={parseInt(charityCollectedFunds / parseInt(charity?.targetFunds) * 100)} status="" />
                 <p>Deadline is {deadline}</p>
+                <img src={`https://charity-file-storage.infura-ipfs.io/ipfs/${imagehash}`} alt="" />
             </Modal>
         </>
 

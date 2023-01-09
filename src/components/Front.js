@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, InputNumber, Tooltip, message } from 'antd';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, InputNumber, Tooltip, message, Upload } from 'antd';
 
+import { infuraIpfsClient } from '../secrets';
 import { ethers } from 'ethers';
-import { BigNumber } from 'ethers';
 import { isAddress } from 'ethers/lib/utils';
 import ContractContext from '../contexts/ContractContext';
 import SignerContext from '../contexts/SignerContext';
@@ -23,10 +23,13 @@ const Front = ({ connectToNetwork }) => {
     const [targetAddress, setTargetAddress] = useState("");
     const [description, setDescription] = useState("");
     const [dueDate, setDueDate] = useState(null);
+    const [file, setFile] = useState(null);
 
     const [form] = Form.useForm();
 
     const [messageApi, contextHolder] = message.useMessage();
+
+    
 
     const success = () => {
         messageApi.open({
@@ -76,14 +79,24 @@ const Front = ({ connectToNetwork }) => {
 
     const onSubmit = async () => {
 
-        if (title === "" || targetFunds === "" || targetAddress === "" || description === "" || dueDate === null || !isAddress(targetAddress)) {
+        if (title === "" || targetFunds === "" || targetAddress === "" || description === "" || dueDate === null || !isAddress(targetAddress) || file === null) {
             return;
+        }
+
+        let imagehash;;
+
+        try {
+            const added = await infuraIpfsClient.add(file)
+            imagehash = added.path;
+            console.log(imagehash);
+        } catch (error) {
+            console.log('Error uploading file: ', error)
         }
 
         const targetFundsWei = convertToWei(targetFunds.toString());
 
         try {
-            const tx = await contract.createNewCharityCause(title, description, "hash123", targetFundsWei, 13213123, targetAddress, { gasLimit: 524073 });
+            const tx = await contract.createNewCharityCause(title, description, imagehash, targetFundsWei, 13213123, targetAddress, { gasLimit: 100000 });
 
             success();
             onClear();
@@ -119,6 +132,10 @@ const Front = ({ connectToNetwork }) => {
             <Option value="WEI">WEI</Option>
         </Select>
     );
+
+    const handleChange = async (e) => {
+        setFile(e.target.files[0]);
+    };
 
     return (
         <>
@@ -250,6 +267,13 @@ const Front = ({ connectToNetwork }) => {
                             </Form.Item>
                         </Col>
                     </Row>
+                    <Row>
+                        {/* <Upload {...props}>
+                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        </Upload> */}
+                        <input type="file" onChange={handleChange}></input>
+                    </Row>
+                    <br />
                     {contextHolder}
                     <Button htmlType="submit" onClick={onSubmit} type="primary">Create New Cause</Button>
                 </Form>
