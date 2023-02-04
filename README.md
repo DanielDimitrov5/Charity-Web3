@@ -1,6 +1,6 @@
 # Dapp charity platfrom
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+charity-web3.web.app/
 
 ## Smart contracts
 
