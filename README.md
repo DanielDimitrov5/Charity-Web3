@@ -1,6 +1,6 @@
 # Dapp charity platfrom
 
-charity-web3.web.app/
+(charity-web3.web.app/)
 
 ## Smart contracts
 
